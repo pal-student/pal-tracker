@@ -1,3 +1,6 @@
+aws-access-key-id: <YOUR_ACCESS_KEY>
+aws-secret-access-key: <YOUR_SECRET_KEY>
+aws-bucket: <YOUR_AWS_S3_BUCKET>
 cf-api-url: CF_API_URL
 cf-username: CF_USERNAME
 cf-password: CF_PASSWORD

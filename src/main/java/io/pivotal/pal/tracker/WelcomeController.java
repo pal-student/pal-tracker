@@ -9,9 +9,6 @@ public class WelcomeController {
 
     private String message = "hello default";
 
-//    public WelcomeController() {
-//    }
-
     public WelcomeController(@Value("${WELCOME_MESSAGE}")String message) {
         this.message = message;
     }
