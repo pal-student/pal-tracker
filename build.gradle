@@ -13,6 +13,7 @@ dependencies {
     compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.1")
     compile("org.springframework.boot:spring-boot-starter-jdbc")
     compile("mysql:mysql-connector-java:6.0.6")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }
 
@@ -26,12 +27,14 @@ def jdbcUrlLocalTest = "jdbc:mysql://localhost:3306/tracker_test?user=tracker&us
 
 bootRun.environment([
         "WELCOME_MESSAGE": "hello",
-        "SPRING_DATASOURCE_URL": jdbcUrlLocalDev
+        "SPRING_DATASOURCE_URL": jdbcUrlLocalDev,
+        "MANAGEMENT_SECURITY_ENABLED": false
 ])
 
 test.environment([
         "WELCOME_MESSAGE": "Hello from test",
-        "SPRING_DATASOURCE_URL": jdbcUrlLocalTest
+        "SPRING_DATASOURCE_URL": jdbcUrlLocalTest,
+        "MANAGEMENT_SECURITY_ENABLED": false
 ])
 
 flyway {
