@@ -1,6 +1,9 @@
+import org.flywaydb.gradle.task.FlywayMigrateTask
+
 plugins {
     id "java"
     id "org.springframework.boot" version "1.5.4.RELEASE"
+    id "org.flywaydb.flyway" version "4.2.0"
 }
 
 dependencies {
@@ -8,6 +11,8 @@ dependencies {
     compile("io.springfox:springfox-swagger2:2.6.1")
     compile("io.springfox:springfox-swagger-ui:2.6.1")
     compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.1")
+    compile("org.springframework.boot:spring-boot-starter-jdbc")
+    compile("mysql:mysql-connector-java:6.0.6")
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }
 
@@ -15,10 +20,27 @@ repositories {
     mavenCentral()
 }
 
+def jdbcUrlLocalDev = "jdbc:mysql://localhost:3306/tracker_dev?user=tracker&useSSL=false&useTimezone=true&serverTimezone=UTC&useLegacyDatetimeCode=false"
+def jdbcUrlLocalTest = "jdbc:mysql://localhost:3306/tracker_test?user=tracker&useSSL=false&useTimezone=true&serverTimezone=UTC&useLegacyDatetimeCode=false"
+
+
 bootRun.environment([
         "WELCOME_MESSAGE": "hello",
+        "SPRING_DATASOURCE_URL": jdbcUrlLocalDev
 ])
 
 test.environment([
         "WELCOME_MESSAGE": "Hello from test",
+        "SPRING_DATASOURCE_URL": jdbcUrlLocalTest
 ])
+
+flyway {
+    url = jdbcUrlLocalDev
+    user = "tracker"
+    password = ""
+    locations = ["filesystem:databases/tracker/migrations"]
+}
+
+task testMigrate(type: FlywayMigrateTask) {
+    url = jdbcUrlLocalTest
+}
