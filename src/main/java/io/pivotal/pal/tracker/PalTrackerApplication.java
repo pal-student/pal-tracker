@@ -23,44 +23,40 @@ public class PalTrackerApplication {
     }
 
     @Bean
-    TimeEntryRepository timeEntryRepository() {
+    TimeEntryRepository timeEntryRepository(DataSource dataSoure) {
 //        return new InMemoryTimeEntryRepository();
-
-        return new JdbcTimeEntryRepository(getDataSource());
-    }
-
-    @Bean
-    public DataSource getDataSource() {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-
-        MysqlDataSource dataSource = new MysqlDataSource();
-
-        if (System.getenv("SPRING_DATASOURCE_URL") != null) {
-            dataSource.setUrl(System.getenv("SPRING_DATASOURCE_URL"));
-        } else if (System.getenv("VCAP_SERVICES") != null) {
-            ObjectMapper objectMapper = new ObjectMapper();
-            try {
-                JsonNode jsonNode = objectMapper.readTree(System.getenv("VCAP_SERVICES"));
-                JsonNode mysql = jsonNode.get("p-mysql");
-                if (mysql.isArray()) {
-                    for (final JsonNode objNode : mysql) {
-                        if (objNode.isObject() && objNode.get("credentials") != null && objNode.get("credentials").get("jdbcUrl") != null) {
-                            dataSource.setUrl(objNode.get("credentials").get("jdbcUrl").asText());
-                        }
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-
-//        String json = "{ \"color\" : \"Black\", \"type\" : \"FIAT\" }";
-//        JsonNode jsonNode = objectMapper.readTree(json);
-//        String color = jsonNode.get("color").asText();
-
-        return dataSource;
+        return new JdbcTimeEntryRepository(dataSoure);
     }
+
+//    @Bean
+//    public DataSource getDataSource() {
+//        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+//
+//        MysqlDataSource dataSource = new MysqlDataSource();
+//
+//        if (System.getenv("SPRING_DATASOURCE_URL") != null) {
+//            dataSource.setUrl(System.getenv("SPRING_DATASOURCE_URL"));
+//        } else if (System.getenv("VCAP_SERVICES") != null) {
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            try {
+//                JsonNode jsonNode = objectMapper.readTree(System.getenv("VCAP_SERVICES"));
+//                JsonNode mysql = jsonNode.get("p-mysql");
+//                if (mysql.isArray()) {
+//                    for (final JsonNode objNode : mysql) {
+//                        if (objNode.isObject() && objNode.get("credentials") != null && objNode.get("credentials").get("jdbcUrl") != null) {
+//                            dataSource.setUrl(objNode.get("credentials").get("jdbcUrl").asText());
+//                        }
+//                    }
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//
+//        }
+//
+//        return dataSource;
+//    }
 
     @Bean
     public ObjectMapper jsonObjectMapper() {
