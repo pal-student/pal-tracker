@@ -23,7 +23,7 @@ public class TimeEntryController {
     @PostMapping
     public ResponseEntity<TimeEntry> create(@RequestBody TimeEntry timeEntry) {
         TimeEntry createdTimeEntry = timeEntriesRepo.create(timeEntry);
-        counter.increment(TimeEntryHealthIndicator.Metrics.ENTRY_CREATED.toString());
+        counter.increment(TimeEntryHealthIndicator.Metrics.TIME_ENTRY_CREATED.toString());
         return new ResponseEntity<>(createdTimeEntry, HttpStatus.CREATED);
     }
 
@@ -31,7 +31,7 @@ public class TimeEntryController {
     public ResponseEntity<TimeEntry> read(@PathVariable Long id) {
         TimeEntry timeEntry = timeEntriesRepo.find(id);
         if (timeEntry != null) {
-            counter.increment(TimeEntryHealthIndicator.Metrics.ENTRY_READ.toString());
+            counter.increment(TimeEntryHealthIndicator.Metrics.TIME_ENTRY_READ.toString());
             return new ResponseEntity<>(timeEntry, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -41,7 +41,7 @@ public class TimeEntryController {
     @GetMapping
     public ResponseEntity<List<TimeEntry>> list() {
         List<TimeEntry> entries = timeEntriesRepo.list();
-        counter.increment(TimeEntryHealthIndicator.Metrics.ENTRIES_LISTED.toString());
+        counter.increment(TimeEntryHealthIndicator.Metrics.TIME_ENTRIES_LISTED.toString());
         return new ResponseEntity<>(entries, HttpStatus.OK);
     }
 
@@ -49,7 +49,7 @@ public class TimeEntryController {
     public ResponseEntity<TimeEntry> update(@PathVariable Long id, @RequestBody TimeEntry timeEntry) {
         TimeEntry updatedTimeEntry = timeEntriesRepo.update(id, timeEntry);
         if (updatedTimeEntry != null) {
-            counter.increment(TimeEntryHealthIndicator.Metrics.ENTRY_UPDATED.toString());
+            counter.increment(TimeEntryHealthIndicator.Metrics.TIME_ENTRY_UPDATED.toString());
             return new ResponseEntity<>(updatedTimeEntry, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -59,7 +59,7 @@ public class TimeEntryController {
     @DeleteMapping("{id}")
     public ResponseEntity<TimeEntry> delete(@PathVariable Long id) {
         timeEntriesRepo.delete(id);
-        counter.increment(TimeEntryHealthIndicator.Metrics.ENTRY_DELETED.toString());
+        counter.increment(TimeEntryHealthIndicator.Metrics.TIME_ENTRY_DELETED.toString());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
